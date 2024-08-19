@@ -15,13 +15,13 @@ import java.util.Optional;
 @Service
 public class PersonajeService {
 
-    private final PersonajesRepository personajRepository;
+    private final PersonajesRepository personajesRepository;
 
     // se puede omitir si solo tiene un constructor @Autowired
 
     public PersonajeService(PersonajesRepository personajesRepository) {
 
-        this.personajRepository = personajesRepository;
+        this.personajesRepository = personajesRepository;
     }
     /*
     guargar un personaje
@@ -30,7 +30,7 @@ public class PersonajeService {
     @Transactional
     public Personaje savePersonajes(Personaje personaje) {
 
-        return personajRepository.save(personaje);
+        return personajesRepository.save(personaje);
 
     }
 
@@ -40,16 +40,15 @@ public class PersonajeService {
    @Transactional(readOnly = true)
     public List<Personaje> getAllPersonajes(){
 
-        return personajRepository.findAll();
+        return personajesRepository.findAll();
     }
 
     /*
     obtengo el id del personaje
     */
     @Transactional(readOnly = true)
-    public Optional<Personaje> getPersonajeById(Long id){
-
-        return personajRepository.findById(id);
+    public Optional<Personaje> getPersonajeById(Long id) {
+        return personajesRepository.findById(id);
     }
 
     /*
@@ -57,14 +56,14 @@ public class PersonajeService {
     */
     @Transactional
     public Personaje updatePersonaje(Long id,Personaje updatePersonaje){
-        Optional<Personaje> existingPersonaje= personajRepository.findById(id);
+        Optional<Personaje> existingPersonaje= personajesRepository.findById(id);
         if(existingPersonaje.isPresent()){
             Personaje personaje= existingPersonaje.get();
             personaje.setNombre(updatePersonaje.getNombre());
             personaje.setDescripcion(updatePersonaje.getDescripcion());
             personaje.setLastName(updatePersonaje.getLastName());
             personaje.setEmail(personaje.getEmail());
-            return personajRepository.save(personaje);
+            return personajesRepository.save(personaje);
         }else{
             throw new RuntimeException("Cannot update personaje"+id);
         }
@@ -76,7 +75,7 @@ public class PersonajeService {
      */
     @Transactional
     public void deletePersonaje(Long id){
-        personajRepository.deleteById(id);
+        personajesRepository.deleteById(id);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.rickyandmorti.rickyandmorti.controladores;
 
-
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,16 +21,15 @@ import java.util.*;
 @RequestMapping("/api/v1")
 public class PersonajeController {
 
-
     private final PersonajeService personajeService;
 
-    //creamos los metodos para manejar las solicitudes http
+    // creamos los metodos para manejar las solicitudes http
 
-   // @Autowired ccon 1 solo constructor no necestias autowired
+    // @Autowired ccon 1 solo constructor no necestias autowired
     public PersonajeController(PersonajeService personajeService) {
         this.personajeService = personajeService;
     }
-    
+
     /*
      * @RequestBody es una anotación en Spring Framework que se utiliza para
      * vincular el cuerpo de la solicitud HTTP a un parámetro en un método de
@@ -38,8 +37,8 @@ public class PersonajeController {
      * --------creo un nuevo personaje
      */
     @PostMapping("/personaje")
-    public ResponseEntity<Personaje> savePersonaje(@RequestBody Personaje personaje){
-        Personaje newpersonaje = personajeService.savePersonajes(personaje); 
+    public ResponseEntity<Personaje> savePersonaje(@RequestBody Personaje personaje) {
+        Personaje newpersonaje = personajeService.savePersonajes(personaje);
         return ResponseEntity.ok(newpersonaje);
     }
 
@@ -48,7 +47,7 @@ public class PersonajeController {
      * 
      */
     @GetMapping("/personajes")
-    public List<Personaje> getAllPersonajes(){
+    public List<Personaje> getAllPersonajes() {
         return personajeService.getAllPersonajes();
 
     }
@@ -57,29 +56,44 @@ public class PersonajeController {
      * get a personaje por ID
      */
     @GetMapping("/personajes/{id}")
-    public ResponseEntity<Personaje> getPersonajeById(@PathVariable Long id){
+    public ResponseEntity<Map<String, String>> getPersonajeById(@PathVariable Long id) {
         Optional<Personaje> personaje = personajeService.getPersonajeById(id);
-        return personaje.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+
+        if (personaje.isPresent()) {
+            return ResponseEntity.ok(Map.of("personaje", personaje.get().toString())); // Replace with appropriate
+                                                                                       // mapping
+        } else {
+            Map<String, String> errorResponse = Map.of("error", "El personaje con ID " + id + " no existe");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
     }
 
     /*
+     * º
      * actualizar personaje por ID
      * 
      */
     @PutMapping("/personajes/{id}")
-    public ResponseEntity<Personaje> updatePersonaje(@PathVariable Long id, @RequestBody Personaje personaje){
-        Personaje updatedpersonaje = personajeService.updatePersonaje(id,personaje);
+    public ResponseEntity<Personaje> updatePersonaje(@PathVariable Long id, @RequestBody Personaje personaje) {
+        Personaje updatedpersonaje = personajeService.updatePersonaje(id, personaje);
         return ResponseEntity.ok(updatedpersonaje);
 
     }
+
     /*
      * borrar un producto por id
      */
     @DeleteMapping("/personajes/{id}")
-    public ResponseEntity<String> deletePersonaje(@PathVariable Long id){
+    public ResponseEntity<String> deletePersonaje(@PathVariable Long id) {
+        Optional<Personaje> personaje = personajeService.getPersonajeById(id);
+        System.out.println(personaje);
+        if (personaje != null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El personaje con ID " + id + " no existe");
+        }
+
         personajeService.deletePersonaje(id);
         return ResponseEntity.ok("Producto borrado con exito");
-    }
 
+    }
 
 }
