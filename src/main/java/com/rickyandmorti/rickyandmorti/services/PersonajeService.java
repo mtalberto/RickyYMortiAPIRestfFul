@@ -1,6 +1,7 @@
 package com.rickyandmorti.rickyandmorti.services;
 
 
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +11,9 @@ import com.rickyandmorti.rickyandmorti.repository.PersonajesRepository;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 //servive para manejar la logica empresarial de la API REST
 @Service
 public class PersonajeService {
@@ -37,10 +40,19 @@ public class PersonajeService {
    /*
     obtengo todo los personajes
    */
-   @Transactional(readOnly = true)
-    public List<Personaje> getAllPersonajes(){
+     @Transactional(readOnly = true)
+    public Map<String, String> getAllPersonajes() {
+        // obtengo la lista de personajes
+        List<Personaje> Listpersonajes = personajesRepository.findAll();
+        
+        // convierto la lista en un map
+        Map<String, String> personajesMap = Listpersonajes.stream()
+                .collect(Collectors.toMap(
+                        personaje -> personaje.getId().toString(), // Key: Personaje ID
+                        personaje -> personaje.toString()           // Value: String representation of Personaje
+                ));
 
-        return personajesRepository.findAll();
+        return personajesMap;
     }
 
     /*
@@ -74,8 +86,13 @@ public class PersonajeService {
     borrar personaje
      */
     @Transactional
-    public void deletePersonaje(Long id){
-        personajesRepository.deleteById(id);
+    public boolean deletePersonaje(Long id) {
+        if (personajesRepository.existsById(id)) {
+            personajesRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

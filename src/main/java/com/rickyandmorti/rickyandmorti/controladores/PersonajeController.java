@@ -47,10 +47,26 @@ public class PersonajeController {
      * 
      */
     @GetMapping("/personajes")
-    public List<Personaje> getAllPersonajes() {
-        return personajeService.getAllPersonajes();
+    public ResponseEntity<Map<String, String>> getAllPersonajes() {
+        try {
+            // Retrieve the map from the service
+            Map<String, String> personajes = personajeService.getAllPersonajes();
 
+            if (personajes.isEmpty()) {
+                // Return 404 Not Found if no personajes are available
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "La lista esta vacia"));
+            }
+
+            // Return the map wrapped in a ResponseEntity with a 200 OK status
+            return ResponseEntity.ok(personajes);
+        } catch (Exception e) {
+            // Return a 500 Internal Server Error in case of an unexpected exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Un error ha ocurrido: " + e.getMessage()));
+        }
     }
+    
 
     /*
      * get a personaje por ID
@@ -84,16 +100,17 @@ public class PersonajeController {
      * borrar un producto por id
      */
     @DeleteMapping("/personajes/{id}")
-    public ResponseEntity<String> deletePersonaje(@PathVariable Long id) {
-        Optional<Personaje> personaje = personajeService.getPersonajeById(id);
-        System.out.println(personaje);
-        if (personaje != null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El personaje con ID " + id + " no existe");
+    public ResponseEntity<Map<String, String>> deletePersonaje(@PathVariable Long id) {
+        boolean borrarPersonaje = personajeService.deletePersonaje(id);
+
+        if (borrarPersonaje) {
+            // Return a success message if the Personaje was deleted
+            return ResponseEntity.ok(Map.of("message", "Personaje borrado con éxito"));
+        } else {
+            // Return a 404 error if the Personaje was not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "El personaje con ID " + id + " no existe"));
         }
-
-        personajeService.deletePersonaje(id);
-        return ResponseEntity.ok("Producto borrado con exito");
-
     }
 
 }
