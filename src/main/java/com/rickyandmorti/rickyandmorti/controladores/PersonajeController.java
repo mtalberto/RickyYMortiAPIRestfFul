@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rickyandmorti.rickyandmorti.entitys.Personaje;
 import com.rickyandmorti.rickyandmorti.services.PersonajeService;
+
+import jakarta.validation.Valid;
+
 import java.util.*;
 
 // @RestController especifica que esta clase es un controlador para solicitudes de API RESTful
@@ -33,12 +36,14 @@ public class PersonajeController {
     /*
      * @RequestBody es una anotación en Spring Framework que se utiliza para
      * vincular el cuerpo de la solicitud HTTP a un parámetro en un método de
-     * controlador
-     * --------creo un nuevo personaje
+     * controlador.
+     * anotación @Valid para forzar la validación de ese objeto de acuerdo a las
+     * anotaciones que previamente hemos añadido en la definición de dicha clase.
+     * --------creo un nuevo personaje--------------
      */
     @PostMapping("/personaje")
-    public ResponseEntity<Personaje> savePersonaje(@RequestBody Personaje personaje) {
-        Personaje newpersonaje = personajeService.savePersonajes(personaje);
+    public ResponseEntity<Personaje> savePersonaje(@Valid @RequestBody Personaje personaje) {
+        Personaje newpersonaje = personajeService.savePersonaje(personaje);
         return ResponseEntity.ok(newpersonaje);
     }
 
@@ -87,10 +92,11 @@ public class PersonajeController {
     /*
      * º
      * actualizar personaje por ID
-     * 
+     *  @Valid para forzar la validación de ese objeto de acuerdo a las
+     * anotaciones que previamente hemos añadido en la definición de dicha clase
      */
     @PutMapping("/personajes/{id}")
-    public ResponseEntity<Personaje> updatePersonaje(@PathVariable Long id, @RequestBody Personaje personaje) {
+    public ResponseEntity<Personaje> updatePersonaje(@Valid @PathVariable Long id, @RequestBody Personaje personaje) {
         Personaje updatedpersonaje = personajeService.updatePersonaje(id, personaje);
         return ResponseEntity.ok(updatedpersonaje);
 

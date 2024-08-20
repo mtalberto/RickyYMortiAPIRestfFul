@@ -1,19 +1,16 @@
 package com.rickyandmorti.rickyandmorti.services;
 
-
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rickyandmorti.rickyandmorti.entitys.Personaje;
 import com.rickyandmorti.rickyandmorti.repository.PersonajesRepository;
 
-
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 //servive para manejar la logica empresarial de la API REST
 @Service
 public class PersonajeService {
@@ -27,63 +24,66 @@ public class PersonajeService {
         this.personajesRepository = personajesRepository;
     }
     /*
-    guargar un personaje
+     * guargar un personaje
      */
 
     @Transactional
-    public Personaje savePersonajes(Personaje personaje) {
+    public Personaje savePersonaje(Personaje personaje) {
 
         return personajesRepository.save(personaje);
 
     }
 
-   /*
-    obtengo todo los personajes
-   */
-     @Transactional(readOnly = true)
+    /*
+     * obtengo todo los personajes
+     */
+    @Transactional(readOnly = true)
     public Map<String, String> getAllPersonajes() {
         // obtengo la lista de personajes
         List<Personaje> Listpersonajes = personajesRepository.findAll();
-        
+
         // convierto la lista en un map
         Map<String, String> personajesMap = Listpersonajes.stream()
                 .collect(Collectors.toMap(
                         personaje -> personaje.getId().toString(), // Key: Personaje ID
-                        personaje -> personaje.toString()           // Value: String representation of Personaje
+                        personaje -> personaje.toString() // Value: String representation of Personaje
                 ));
 
         return personajesMap;
     }
 
     /*
-    obtengo el id del personaje
-    */
+     * obtengo el id del personaje
+     */
     @Transactional(readOnly = true)
     public Optional<Personaje> getPersonajeById(Long id) {
         return personajesRepository.findById(id);
     }
 
     /*
-    update personajes
-    */
+     * update personajes
+     */
     @Transactional
-    public Personaje updatePersonaje(Long id,Personaje updatePersonaje){
-        Optional<Personaje> existingPersonaje= personajesRepository.findById(id);
-        if(existingPersonaje.isPresent()){
-            Personaje personaje= existingPersonaje.get();
+    public Personaje updatePersonaje(Long id, Personaje updatePersonaje) {
+        Optional<Personaje> existingPersonaje = personajesRepository.findById(id);
+        if (existingPersonaje.isPresent()) {
+            Personaje personaje = existingPersonaje.get();
             personaje.setNombre(updatePersonaje.getNombre());
+            personaje.setEdad(updatePersonaje.getEdad());
             personaje.setDescripcion(updatePersonaje.getDescripcion());
-            personaje.setLastName(updatePersonaje.getLastName());
-            personaje.setEmail(personaje.getEmail());
+            personaje.setApellido(updatePersonaje.getApellido());
+            personaje.setRaza(updatePersonaje.getRaza());
+            personaje.setGenero(updatePersonaje.getGenero());
+            personaje.setFechaNacimiento(updatePersonaje.getFechaNacimiento());
+
             return personajesRepository.save(personaje);
-        }else{
-            throw new RuntimeException("Cannot update personaje"+id);
+        } else {
+            throw new RuntimeException("No puedo actualizar el personaje" + id);
         }
     }
 
-
     /*
-    borrar personaje
+     * borrar personaje
      */
     @Transactional
     public boolean deletePersonaje(Long id) {
