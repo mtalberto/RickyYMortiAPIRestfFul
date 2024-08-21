@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.rickyandmorti.rickyandmorti.entitys.Personaje;
+import com.rickyandmorti.rickyandmorti.entitys.PersonajeDTO;
 import com.rickyandmorti.rickyandmorti.services.PersonajeService;
 import jakarta.validation.Valid;
 import java.util.*;
@@ -46,26 +47,26 @@ public class PersonajeController {
 
     /*
      * --------obtengo la lista de personajes
-     * 
+     * podria hacer 2 metodos que controle los errores de not found y serval error
      */
     @GetMapping("/personajes")
-    public ResponseEntity<Map<String, String>> getAllPersonajes() {
+    public ResponseEntity<Map<String, Object>> getAllPersonajes() {
         try {
-            // Retrieve the map from the service
-            Map<String, String> personajes = personajeService.getAllPersonajes();
+           
+            Map<String, PersonajeDTO> personajesMap = personajeService.getAllPersonajes();
 
-            if (personajes.isEmpty()) {
+            if (personajesMap.isEmpty()) {
                 // Return 404 Not Found if no personajes are available
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "La lista esta vacia"));
+                Map<String, Object> errorResponse = Map.of("error", "No se encontraron personajes");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
 
-            // Return the map wrapped in a ResponseEntity with a 200 OK status
-            return ResponseEntity.ok(personajes);
+           
+            return ResponseEntity.ok(Map.of("usuarios", personajesMap));
         } catch (Exception e) {
-            // Return a 500 Internal Server Error in case of an unexpected exception
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Un error ha ocurrido: " + e.getMessage()));
+           
+            Map<String, Object> errorResponse = Map.of("error", "Un error ha ocurrido: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
@@ -73,15 +74,17 @@ public class PersonajeController {
      * get a personaje por ID
      */
     @GetMapping("/personajes/{id}")
-    public ResponseEntity<Map<String, String>> getPersonajeById(@PathVariable Long id) {
-        Optional<Personaje> personaje = personajeService.getPersonajeById(id);
-
-        if (personaje.isPresent()) {
-            return ResponseEntity.ok(Map.of("personaje", personaje.get().toString())); // Replace with appropriate
+    public ResponseEntity<Map<String, Object>> getPersonajeById(@PathVariable Long id) {
+        Optional<PersonajeDTO> personajeDTO = personajeService.getPersonajeById(id);
+       
+        Map<String, Object> response = new HashMap<>();
+        if (personajeDTO.isPresent()) {
+            response.put("personaje", personajeDTO.get());
+            return ResponseEntity.ok(response);
                                                                                        // mapping
         } else {
-            Map<String, String> errorResponse = Map.of("error", "El personaje con ID " + id + " no existe");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            response.put("error", "El personaje con ID " + id + " no existe");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 

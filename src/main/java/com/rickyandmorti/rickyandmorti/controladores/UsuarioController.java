@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rickyandmorti.rickyandmorti.entitys.Usuario;
-
+import com.rickyandmorti.rickyandmorti.entitys.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.services.UsuarioService;
 import java.util.*;
 import jakarta.validation.Valid;
@@ -47,39 +47,40 @@ public class UsuarioController {
      * 
      */
     @GetMapping("/usuarios")
-    public ResponseEntity<Map<String, String>> getAllUsuarios() {
+    public ResponseEntity<Map<String, Object>> getAllUsuarios() {
         try {
-            // Retrieve the map from the service
-            Map<String, String> usuarios = usuarioService.getAlUsuarios();
+            // Obtiene el mapa de usuarios desde el servicio
+            Map<String, UsuarioDTO> usuariosMap = usuarioService.getAlUsuarios();
 
-            if (usuarios.isEmpty()) {
-                // Return 404 Not Found if no usuarios are available
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "La lista esta vacia"));
+            if (usuariosMap.isEmpty()) {
+                // Devuelve un mensaje de error si no se encuentran usuarios
+                Map<String, Object> errorResponse = Map.of("error", "No se encontraron usuarios");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
 
-            // devuelve ResponseEntity con 200 OK status
-            return ResponseEntity.ok(usuarios);
+            // Devuelve el mapa de usuarios con estado 200 OK
+            return ResponseEntity.ok(Map.of("usuarios", usuariosMap));
         } catch (Exception e) {
-            // devuelve a 500 Internal Server Error en caso de error inesparado
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Un error ha ocurrido: " + e.getMessage()));
+            // Devuelve un mensaje de error en caso de una excepción
+            Map<String, Object> errorResponse = Map.of("error", "Un error ha ocurrido: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
     /*
      * get a usuario por ID
      */
-    @GetMapping("/usuarios/{id}")
-    public ResponseEntity<Map<String, String>> getUsuarioID(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioService.getUsuarioById(id);
+    @GetMapping("/usuario/{id}")
+    public ResponseEntity<Map<String, Object>> getUsuarioById(@PathVariable Long id) {
+        Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioById(id);
 
-        if (usuario.isPresent()) {
-            return ResponseEntity.ok(Map.of("usuario", usuario.get().toString()));
+        Map<String, Object> response = new HashMap<>();
+        if (usuarioDTO.isPresent()) {
+            response.put("usuario", usuarioDTO.get());
+            return ResponseEntity.ok(response);
         } else {
-            Map<String, String> errorResponse = Map.of("error", "El usuario con ID " + id + " no existe");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            response.put("error", "El usuario con ID " + id + " no existe");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 

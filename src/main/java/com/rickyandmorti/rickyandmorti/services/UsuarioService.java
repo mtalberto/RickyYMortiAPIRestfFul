@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rickyandmorti.rickyandmorti.entitys.Usuario;
+import com.rickyandmorti.rickyandmorti.entitys.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.repository.UsuarioRepository;
 import java.util.List;
 import java.util.Map;
@@ -31,31 +32,56 @@ public class UsuarioService {
     }
 
     /*
+     * builder 
      * obtengo todo los usuarios
      */
     @Transactional(readOnly = true)
-    public Map<String, String> getAlUsuarios() {
-        // obtengo la lista de usuarios
-        List<Usuario> Listusuarios = usuarioRepository.findAll();
+    public Map<String, UsuarioDTO> getAlUsuarios() {
+        // Obtiene la lista de usuarios
+        List<Usuario> listUsuarios = usuarioRepository.findAll();
 
-        // convierto la lista en un map
-        Map<String, String> personajesMap = Listusuarios.stream()
+        // Convierte la lista en un mapa
+        Map<String, UsuarioDTO> usuariosMap = listUsuarios.stream()
                 .collect(Collectors.toMap(
-                        personaje -> personaje.getId().toString(), // usuari ID
-                        personaje -> personaje.toString() //
+                        usuario -> usuario.getId().toString(), // Clave: ID de Usuario
+                        usuario -> UsuarioDTO.builder() //
+                                .id(usuario.getId())
+                                .nombre(usuario.getNombre())
+                                .apellido(usuario.getApellido())
+                                .edad(usuario.getEdad())
+                                .fechaNacimiento(usuario.getFechaNacimiento())
+                                .genero(usuario.getGenero())
+                                .email(usuario.getEmail())
+                                .telefono(usuario.getTelefono())
+                                .build() 
                 ));
 
-        return personajesMap;
+        return usuariosMap;
     }
 
     /*
      * obtengo el id del usuario
      */
     @Transactional(readOnly = true)
-    public Optional<Usuario> getUsuarioById(Long id) {
-        return usuarioRepository.findById(id);
+    public Optional<UsuarioDTO> getUsuarioById(Long id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            UsuarioDTO usuarioDTO = UsuarioDTO.builder()
+                    .id(usuario.getId())
+                    .nombre(usuario.getNombre())
+                    .apellido(usuario.getApellido())
+                    .edad(usuario.getEdad())
+                    .fechaNacimiento(usuario.getFechaNacimiento())
+                    .genero(usuario.getGenero())
+                    .email(usuario.getEmail())
+                    .telefono(usuario.getTelefono())
+                    .build();
+            return Optional.of(usuarioDTO);
+        } else {
+            return Optional.empty();
+        }
     }
-
     /*
      * update usuario
      */

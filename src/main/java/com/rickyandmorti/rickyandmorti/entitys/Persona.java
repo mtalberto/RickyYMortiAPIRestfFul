@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public abstract class Persona {
 
     @NotBlank(message = "Nombre no puede estar vacío")

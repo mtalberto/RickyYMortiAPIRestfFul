@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rickyandmorti.rickyandmorti.entitys.Personaje;
+import com.rickyandmorti.rickyandmorti.entitys.PersonajeDTO;
+import com.rickyandmorti.rickyandmorti.entitys.Usuario;
+import com.rickyandmorti.rickyandmorti.entitys.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.repository.PersonajesRepository;
 
 import java.util.List;
@@ -38,16 +41,24 @@ public class PersonajeService {
      * obtengo todo los personajes
      */
     @Transactional(readOnly = true)
-    public Map<String, String> getAllPersonajes() {
-        // obtengo la lista de personajes
-        List<Personaje> Listpersonajes = personajesRepository.findAll();
+    public Map<String, PersonajeDTO> getAllPersonajes() {
+        // Obtiene la lista de personajes
+        List<Personaje> listPersonajes = personajesRepository.findAll();
 
-        // convierto la lista en un map
-        Map<String, String> personajesMap = Listpersonajes.stream()
+        // Convierte la lista en un mapa
+        Map<String, PersonajeDTO> personajesMap = listPersonajes.stream()
                 .collect(Collectors.toMap(
-                        personaje -> personaje.getId().toString(), // Key: Personaje ID
-                        personaje -> personaje.toString() // Value: String representation of Personaje
-                ));
+                        personaje -> personaje.getId().toString(),
+                        personaje -> PersonajeDTO.builder()
+                                .id(personaje.getId())
+                                .nombre(personaje.getNombre())
+                                .apellido(personaje.getApellido())
+                                .edad(personaje.getEdad())
+                                .fechaNacimiento(personaje.getFechaNacimiento())
+                                .genero(personaje.getGenero())
+                                .descripcion(personaje.getDescripcion()) 
+                                .raza(personaje.getRaza())
+                                .build()));
 
         return personajesMap;
     }
@@ -56,9 +67,26 @@ public class PersonajeService {
      * obtengo el id del personaje
      */
     @Transactional(readOnly = true)
-    public Optional<Personaje> getPersonajeById(Long id) {
-        return personajesRepository.findById(id);
+    public Optional<PersonajeDTO> getPersonajeById(Long id) {
+        Optional<Personaje> personajeOpt = personajesRepository.findById(id);
+        if (personajeOpt.isPresent()) {
+            Personaje personaje = personajeOpt.get();
+            PersonajeDTO personajeDTO = PersonajeDTO.builder()
+                    .id(personaje.getId())
+                    .nombre(personaje.getNombre())
+                    .apellido(personaje.getApellido())
+                    .edad(personaje.getEdad())
+                    .fechaNacimiento(personaje.getFechaNacimiento())
+                    .genero(personaje.getGenero())
+                    .descripcion(personaje.getDescripcion())
+                    .raza(personaje.getRaza())
+                    .build();
+            return Optional.of(personajeDTO);
+        } else {
+            return Optional.empty();
+        }
     }
+
 
     /*
      * update personajes
