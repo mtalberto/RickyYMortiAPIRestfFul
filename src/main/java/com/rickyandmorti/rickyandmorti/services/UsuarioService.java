@@ -31,7 +31,7 @@ public class UsuarioService {
     }
 
     /*
-     * obtengo todo los usuario
+     * obtengo todo los usuarios
      */
     @Transactional(readOnly = true)
     public Map<String, String> getAlUsuarios() {

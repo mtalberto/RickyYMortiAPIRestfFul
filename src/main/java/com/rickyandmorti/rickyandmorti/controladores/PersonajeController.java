@@ -10,12 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.rickyandmorti.rickyandmorti.entitys.Personaje;
 import com.rickyandmorti.rickyandmorti.services.PersonajeService;
-
 import jakarta.validation.Valid;
-
 import java.util.*;
 
 // @RestController especifica que esta clase es un controlador para solicitudes de API RESTful
@@ -71,7 +68,6 @@ public class PersonajeController {
                     .body(Map.of("error", "Un error ha ocurrido: " + e.getMessage()));
         }
     }
-    
 
     /*
      * get a personaje por ID
@@ -92,7 +88,8 @@ public class PersonajeController {
     /*
      * º
      * actualizar personaje por ID
-     *  @Valid para forzar la validación de ese objeto de acuerdo a las
+     * 
+     * @Valid para forzar la validación de ese objeto de acuerdo a las
      * anotaciones que previamente hemos añadido en la definición de dicha clase
      */
     @PutMapping("/personajes/{id}")
