@@ -3,8 +3,8 @@ package com.rickyandmorti.rickyandmorti.services;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rickyandmorti.rickyandmorti.dto.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.entitys.Usuario;
-import com.rickyandmorti.rickyandmorti.entitys.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.repository.UsuarioRepository;
 import java.util.List;
 import java.util.Map;

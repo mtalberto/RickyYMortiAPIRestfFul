@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rickyandmorti.rickyandmorti.dto.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.entitys.Usuario;
-import com.rickyandmorti.rickyandmorti.entitys.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.services.UsuarioService;
 import java.util.*;
 import jakarta.validation.Valid;

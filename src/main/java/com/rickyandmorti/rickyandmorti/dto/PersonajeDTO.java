@@ -1,4 +1,4 @@
-package com.rickyandmorti.rickyandmorti.entitys;
+package com.rickyandmorti.rickyandmorti.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

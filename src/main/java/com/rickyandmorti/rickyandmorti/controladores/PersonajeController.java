@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.rickyandmorti.rickyandmorti.dto.PersonajeDTO;
 import com.rickyandmorti.rickyandmorti.entitys.Personaje;
-import com.rickyandmorti.rickyandmorti.entitys.PersonajeDTO;
 import com.rickyandmorti.rickyandmorti.services.PersonajeService;
 import jakarta.validation.Valid;
 import java.util.*;
