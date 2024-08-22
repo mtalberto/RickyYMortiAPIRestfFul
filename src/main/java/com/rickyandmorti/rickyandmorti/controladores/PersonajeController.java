@@ -1,6 +1,7 @@
 package com.rickyandmorti.rickyandmorti.controladores;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,23 +53,17 @@ public class PersonajeController {
      */
     @GetMapping("/personajes")
     public ResponseEntity<Map<String, Object>> getAllPersonajes() {
-        try {
-           
-            Map<String, PersonajeDTO> personajesMap = personajeService.getAllPersonajes();
 
-            if (personajesMap.isEmpty()) {
-                // Return 404 Not Found if no personajes are available
-                Map<String, Object> errorResponse = Map.of("error", "No se encontraron personajes");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-            }
+        Map<String, PersonajeDTO> personajesMap = personajeService.getAllPersonajes();
 
-           
-            return ResponseEntity.ok(Map.of("usuarios", personajesMap));
-        } catch (Exception e) {
-           
-            Map<String, Object> errorResponse = Map.of("error", "Un error ha ocurrido: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        if (personajesMap.isEmpty()) {
+            // Return 404 Not Found if no personajes are available
+            throw new ResourceNotFoundException("No se encontraron personajes");
+
         }
+
+        return ResponseEntity.ok(Map.of("usuarios", personajesMap));
+
     }
 
     /*
@@ -77,15 +72,14 @@ public class PersonajeController {
     @GetMapping("/personajes/{id}")
     public ResponseEntity<Map<String, Object>> getPersonajeById(@PathVariable Long id) {
         Optional<PersonajeDTO> personajeDTO = personajeService.getPersonajeById(id);
-       
+
         Map<String, Object> response = new HashMap<>();
         if (personajeDTO.isPresent()) {
             response.put("personaje", personajeDTO.get());
             return ResponseEntity.ok(response);
-                                                                                       // mapping
+            // mapping
         } else {
-            response.put("error", "El personaje con ID " + id + " no existe");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            throw new ResourceNotFoundException("el personaje con el " + id + " no existe ");
         }
     }
 
@@ -97,9 +91,16 @@ public class PersonajeController {
      * anotaciones que previamente hemos añadido en la definición de dicha clase
      */
     @PutMapping("/personajes/{id}")
-    public ResponseEntity<Personaje> updatePersonaje(@Valid @PathVariable Long id, @RequestBody Personaje personaje) {
-        Personaje updatedpersonaje = personajeService.updatePersonaje(id, personaje);
-        return ResponseEntity.ok(updatedpersonaje);
+    public ResponseEntity<Personaje> updatePersonaje(@Valid @PathVariable Long id,@Valid @RequestBody Personaje personaje) {
+        Optional<PersonajeDTO> personajeDTO = personajeService.getPersonajeById(id);
+
+        if (personajeDTO.isEmpty()) {
+            throw new ResourceNotFoundException("el personaje con el " + id + " no existe ");
+        }else{
+           
+            Personaje updatedpersonaje = personajeService.updatePersonaje(id, personaje);
+            return ResponseEntity.ok(updatedpersonaje);
+        }
 
     }
 
@@ -115,8 +116,7 @@ public class PersonajeController {
             return ResponseEntity.ok(Map.of("message", "Personaje borrado con éxito"));
         } else {
             // Return a 404 error if the Personaje was not found
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "El personaje con ID " + id + " no existe"));
+            throw new ResourceNotFoundException("el personaje con el " + id + " no existe ");
         }
     }
 

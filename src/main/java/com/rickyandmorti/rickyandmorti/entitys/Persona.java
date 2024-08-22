@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Getter
 @Setter
 @ToString
-public abstract class Persona {
+public abstract class Persona implements Serializable{
 
     @NotBlank(message = "Nombre no puede estar vacío")
     @Size(max = 20, message = "Nombre no debe tener más de 20 caracteres")
