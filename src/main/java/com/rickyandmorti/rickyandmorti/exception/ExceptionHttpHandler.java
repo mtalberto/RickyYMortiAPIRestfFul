@@ -21,12 +21,13 @@ import java.util.*;
 public class ExceptionHttpHandler {
 
   
- // Manejo de excepciones generales
+    // Manejo de excepciones generales
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleAllExceptions(Exception ex) {
         Map<String, Object> errorResponse = Map.of(
             "error", "Un error ha ocurrido: " + ex.getMessage(),
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value()
+            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            "error", HttpStatus.CONFLICT.getReasonPhrase()            
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }

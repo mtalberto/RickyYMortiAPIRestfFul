@@ -42,9 +42,20 @@ public class PersonajeController {
      * --------creo un nuevo personaje--------------
      */
     @PostMapping("/personaje")
-    public ResponseEntity<Personaje> savePersonaje(@Valid @RequestBody Personaje personaje) {
-        Personaje newpersonaje = personajeService.savePersonaje(personaje);
-        return ResponseEntity.ok(newpersonaje);
+    public ResponseEntity<Object> savePersonaje(@Valid @RequestBody Personaje personaje) {
+        // Verifica si el nombre del personaje ya existe
+        Optional<String> personajeOPT = personajeService.getNamePersonaje(personaje.getNombre());
+
+        if (personajeOPT.isPresent()) {
+            // Si el personaje ya existe, devuelve un error 409 Conflict
+            throw new ResourceNotFoundException("El nombre"+ personaje.getNombre() +"del personaje ya existe");
+        }
+
+        // Si el personaje no existe, lo guarda
+        Personaje newPersonaje = personajeService.savePersonaje(personaje);
+
+        // Devuelve el nuevo personaje creado con estado 200 OK
+        return ResponseEntity.ok(newPersonaje);
     }
 
     /*
@@ -91,13 +102,14 @@ public class PersonajeController {
      * anotaciones que previamente hemos añadido en la definición de dicha clase
      */
     @PutMapping("/personajes/{id}")
-    public ResponseEntity<Personaje> updatePersonaje(@Valid @PathVariable Long id,@Valid @RequestBody Personaje personaje) {
+    public ResponseEntity<Personaje> updatePersonaje(@Valid @PathVariable Long id,
+            @Valid @RequestBody Personaje personaje) {
         Optional<PersonajeDTO> personajeDTO = personajeService.getPersonajeById(id);
 
         if (personajeDTO.isEmpty()) {
             throw new ResourceNotFoundException("el personaje con el " + id + " no existe ");
-        }else{
-           
+        } else {
+
             Personaje updatedpersonaje = personajeService.updatePersonaje(id, personaje);
             return ResponseEntity.ok(updatedpersonaje);
         }

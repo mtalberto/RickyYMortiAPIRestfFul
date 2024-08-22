@@ -1,5 +1,6 @@
 package com.rickyandmorti.rickyandmorti.controladores;
 
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +39,7 @@ public class UsuarioController {
      */
     @PostMapping("/usuario")
     public ResponseEntity<Usuario> saveusuario(@Valid @RequestBody Usuario usuario) {
+        
         Usuario newusuario = usuarioService.savesUsuario(usuario);
         return ResponseEntity.ok(newusuario);
     }
@@ -48,23 +50,18 @@ public class UsuarioController {
      */
     @GetMapping("/usuarios")
     public ResponseEntity<Map<String, Object>> getAllUsuarios() {
-        try {
+        
             // Obtiene el mapa de usuarios desde el servicio
             Map<String, UsuarioDTO> usuariosMap = usuarioService.getAlUsuarios();
 
             if (usuariosMap.isEmpty()) {
                 // Devuelve un mensaje de error si no se encuentran usuarios
-                Map<String, Object> errorResponse = Map.of("error", "No se encontraron usuarios");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+               throw new ResourceNotFoundException("No se encontraron usuarios");
             }
 
             // Devuelve el mapa de usuarios con estado 200 OK
             return ResponseEntity.ok(Map.of("usuarios", usuariosMap));
-        } catch (Exception e) {
-            // Devuelve un mensaje de error en caso de una excepción
-            Map<String, Object> errorResponse = Map.of("error", "Un error ha ocurrido: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+          
     }
 
     /*
@@ -75,12 +72,12 @@ public class UsuarioController {
         Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioById(id);
 
         Map<String, Object> response = new HashMap<>();
-        if (usuarioDTO.isPresent()) {
+        if (!usuarioDTO.isPresent()) {
+            throw new ResourceNotFoundException("el usuario con el " + id + " no existe ");
+            
+        } else {
             response.put("usuario", usuarioDTO.get());
             return ResponseEntity.ok(response);
-        } else {
-            response.put("error", "El usuario con ID " + id + " no existe");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 

@@ -33,6 +33,14 @@ public class PersonajeService {
 
     }
 
+    @Transactional(readOnly = true)
+    public Optional<String> getNamePersonaje(String nombre) {
+        Optional<Personaje> personaje = personajesRepository.findByNombre(nombre);
+
+       
+        return personaje.map(Personaje::getNombre);
+    }
+
     /*
      * obtengo todo los personajes
      */
