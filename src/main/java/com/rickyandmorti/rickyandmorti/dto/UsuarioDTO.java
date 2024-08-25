@@ -27,5 +27,9 @@ public class UsuarioDTO {
     private String genero;
     private String email;
     private String telefono;
+    private LocalDate fechaCreacion;
+    private DireccionDTO direccion;
+
+  
 }
 

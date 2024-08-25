@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rickyandmorti.rickyandmorti.dto.PersonajeDTO;
+
 import com.rickyandmorti.rickyandmorti.entitys.Personaje;
 import com.rickyandmorti.rickyandmorti.services.PersonajeService;
 import jakarta.validation.Valid;
@@ -33,6 +34,8 @@ public class PersonajeController {
         this.personajeService = personajeService;
     }
 
+
+
     /*
      * @RequestBody es una anotación en Spring Framework que se utiliza para
      * vincular el cuerpo de la solicitud HTTP a un parámetro en un método de
@@ -45,15 +48,17 @@ public class PersonajeController {
     public ResponseEntity<Object> savePersonaje(@Valid @RequestBody Personaje personaje) {
         // Verifica si el nombre del personaje ya existe
         Optional<String> personajeOPT = personajeService.getNamePersonaje(personaje.getNombre());
-
+        personaje.setNombre(personaje.getNombre().toLowerCase());
+        personaje.setNombre(PersonajeDTO.capitalizeFirstLetterNombre(personaje.getNombre()));
         if (personajeOPT.isPresent()) {
             // Si el personaje ya existe, devuelve un error 409 Conflict
-            throw new ResourceNotFoundException("El nombre"+ personaje.getNombre() +"del personaje ya existe");
+            throw new ResourceNotFoundException("El nombre "+ personaje.getNombre()+" del personaje ya existe");
         }
 
+        
         // Si el personaje no existe, lo guarda
         Personaje newPersonaje = personajeService.savePersonaje(personaje);
-
+        newPersonaje.getNombre().toLowerCase();
         // Devuelve el nuevo personaje creado con estado 200 OK
         return ResponseEntity.ok(newPersonaje);
     }
@@ -74,12 +79,13 @@ public class PersonajeController {
         }
 
         return ResponseEntity.ok(Map.of("usuarios", personajesMap));
-
     }
 
     /*
-     * get a personaje por ID
+     * --------obtengo el personaje por id
+     * r
      */
+     
     @GetMapping("/personajes/{id}")
     public ResponseEntity<Map<String, Object>> getPersonajeById(@PathVariable Long id) {
         Optional<PersonajeDTO> personajeDTO = personajeService.getPersonajeById(id);

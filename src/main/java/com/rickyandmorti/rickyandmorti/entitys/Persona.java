@@ -56,4 +56,22 @@ public abstract class Persona implements Serializable{
     @Column(nullable = false)
     private String genero;
 
+
+
+    /*
+     * // @Temporal: Para especificar cómo se almacenan las fechas en la base de
+     * datos
+     * // con JPA.
+     * 
+     * @JsonFormat para el formate de la fecha en JSOn
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
+    @Column(name = "fecha_creacion")
+    private LocalDate fechaCreacion;
+
+   
+    
+
 }

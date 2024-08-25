@@ -1,6 +1,12 @@
 package com.rickyandmorti.rickyandmorti.entitys;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +28,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @Setter
 @ToString
+// soft delete actualizo el campo
+@SQLDelete(sql = "UPDATE usuarios SET softdeletedUser = true WHERE id=?")
+//este filtro excluiran a los usuarios eliminados
+@FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedUserFilter", condition = "deleted = :isDeleted")
 @Table(name = "usuarios")
 public class Usuario extends Persona {
 
@@ -41,4 +52,20 @@ public class Usuario extends Persona {
     @Size(max =20, message = "telefono no debe tener más de 20 caracteres")
     @Pattern(regexp = "^\\+?[0-9]*$", message = "Teléfono solo incluir números")
     private String telefono;
+
+    @Column(name = "softdeletedUser")
+    
+    private boolean softdeletedUser = Boolean.FALSE;
+  
+    /**
+     * Se utiliza para marcar una clase como una entidad embebible, lo que significa
+     * que sus propiedades se pueden "incrustar" dentro de otra entidad sin crear
+     * una tabla separada en la base de datos
+     * 
+     * 
+     */
+
+    @Embedded
+    private Direccion direccion;
 }
+

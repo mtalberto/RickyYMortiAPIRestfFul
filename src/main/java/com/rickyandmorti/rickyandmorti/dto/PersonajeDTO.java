@@ -26,4 +26,13 @@ public class PersonajeDTO {
     private String genero;
     private String descripcion;
     private String raza;
+    private LocalDate fechaCreacion;
+
+    
+    public static String capitalizeFirstLetterNombre(String nombre) {
+        if (nombre == null || nombre.isEmpty()) {
+            return nombre; // Maneja el caso de cadenas nulas o vacías
+        }
+        return nombre.substring(0, 1).toUpperCase() + nombre.substring(1).toLowerCase();
+    }
 }
