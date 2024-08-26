@@ -1,15 +1,12 @@
 package com.rickyandmorti.rickyandmorti.entitys;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+
 
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

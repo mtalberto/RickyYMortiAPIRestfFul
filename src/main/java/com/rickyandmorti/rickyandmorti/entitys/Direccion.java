@@ -1,6 +1,14 @@
 package com.rickyandmorti.rickyandmorti.entitys;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Se utiliza para marcar una clase como una entidad embebible, lo que significa
@@ -9,44 +17,23 @@ import jakarta.persistence.Embeddable;
  * 
  * 
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class Direccion {
 
+    
+    @NotBlank(message="el campo calle no puede estar vacio")
     private String calle;
+    @NotBlank(message = "el campo ciudad no puede estar vacio")
     private String ciudad;
+    @NotBlank(message = "el campo codigoPostal no puede estar vacio")
+    @Size(max=5, min=5, message = "El código postal debe tener 5 caracteres")
+    @Pattern(regexp = "^(?:0[1-9]|[1-4]\\d|5[0-2])\\d{3}$", message = "El código postal no es válido")
     private String codigoPostal;
+    @NotBlank(message = "el campono pais no puede estar vacio")
     private String pais;
 
-    // Getters y Setters
-    public String getCalle() {
-        return calle;
-    }
-
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public String getCodigoPostal() {
-        return codigoPostal;
-    }
-
-    public void setCodigoPostal(String codigoPostal) {
-        this.codigoPostal = codigoPostal;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
-    }
+   
 }
