@@ -3,6 +3,7 @@ package com.rickyandmorti.rickyandmorti.services;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rickyandmorti.rickyandmorti.dto.DireccionDTO;
 import com.rickyandmorti.rickyandmorti.dto.UsuarioDTO;
 import com.rickyandmorti.rickyandmorti.entitys.Usuario;
 import com.rickyandmorti.rickyandmorti.repository.UsuarioRepository;
@@ -32,7 +33,7 @@ public class UsuarioService {
     }
 
     /*
-     * builder 
+     * builder
      * obtengo todo los usuarios
      */
     @Transactional(readOnly = true)
@@ -44,7 +45,7 @@ public class UsuarioService {
         Map<String, UsuarioDTO> usuariosMap = listUsuarios.stream()
                 .collect(Collectors.toMap(
                         usuario -> usuario.getId().toString(), // Clave: ID de Usuario
-                        usuario -> UsuarioDTO.builder() //
+                        usuario -> UsuarioDTO.builder()
                                 .id(usuario.getId())
                                 .nombre(usuario.getNombre())
                                 .apellido(usuario.getApellido())
@@ -53,8 +54,13 @@ public class UsuarioService {
                                 .genero(usuario.getGenero())
                                 .email(usuario.getEmail())
                                 .telefono(usuario.getTelefono())
-                                .build() 
-                ));
+                                .direccion(DireccionDTO.builder()
+                                        .calle(usuario.getDireccion().getCalle())
+                                        .ciudad(usuario.getDireccion().getCiudad())
+                                        .codigoPostal(usuario.getDireccion().getCodigoPostal())
+                                        .pais(usuario.getDireccion().getPais())
+                                        .build())
+                                .build()));
 
         return usuariosMap;
     }
@@ -76,12 +82,18 @@ public class UsuarioService {
                     .genero(usuario.getGenero())
                     .email(usuario.getEmail())
                     .telefono(usuario.getTelefono())
+                    .direccion(DireccionDTO.builder()
+                            .calle(usuario.getDireccion().getCalle())
+                            .ciudad(usuario.getDireccion().getCiudad())
+                            .codigoPostal(usuario.getDireccion().getCodigoPostal())
+                            .pais(usuario.getDireccion().getPais()).build())
                     .build();
             return Optional.of(usuarioDTO);
         } else {
             return Optional.empty();
         }
     }
+
     /*
      * update usuario
      */

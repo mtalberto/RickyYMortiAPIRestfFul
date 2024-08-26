@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
+import java.time.ZoneId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 //MappedSuperclass Jpa Herencia persona no tendra tabla
@@ -59,17 +59,16 @@ public abstract class Persona implements Serializable{
 
 
     /*
-     * // @Temporal: Para especificar cómo se almacenan las fechas en la base de
-     * datos
+     * 
+     * Guardo la fecha de creacion del registro
      * // con JPA.
      * 
      * @JsonFormat para el formate de la fecha en JSOn
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     @Column(name = "fecha_creacion")
-    private LocalDate fechaCreacion;
+    private LocalDate fechaCreacion = LocalDate.now(ZoneId.of("Europa/Madrid"));
 
    
     
