@@ -52,7 +52,7 @@ public class UsuarioController {
     public ResponseEntity<Map<String, Object>> getAllUsuarios() {
         
             // Obtiene el mapa de usuarios desde el servicio
-            Map<String, UsuarioDTO> usuariosMap = usuarioService.getAlUsuarios();
+            Map<String, UsuarioDTO> usuariosMap = usuarioService.getAllUsuarios();
 
             if (usuariosMap.isEmpty()) {
                 // Devuelve un mensaje de error si no se encuentran usuarios

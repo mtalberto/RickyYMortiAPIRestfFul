@@ -37,9 +37,9 @@ public class UsuarioService {
      * obtengo todo los usuarios
      */
     @Transactional(readOnly = true)
-    public Map<String, UsuarioDTO> getAlUsuarios() {
+    public Map<String, UsuarioDTO> getAllUsuarios() {
         // Obtiene la lista de usuarios
-        List<Usuario> listUsuarios = usuarioRepository.findAll();
+        List<Usuario> listUsuarios = usuarioRepository.findAllActiveUsers();
 
         // Convierte la lista en un mapa
         Map<String, UsuarioDTO> usuariosMap = listUsuarios.stream()
@@ -70,7 +70,7 @@ public class UsuarioService {
      */
     @Transactional(readOnly = true)
     public Optional<UsuarioDTO> getUsuarioById(Long id) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByActiveUser(id);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
             UsuarioDTO usuarioDTO = UsuarioDTO.builder()
@@ -89,6 +89,7 @@ public class UsuarioService {
                             .pais(usuario.getDireccion().getPais()).build())
                     .build();
             return Optional.of(usuarioDTO);
+        
         } else {
             return Optional.empty();
         }
@@ -99,7 +100,7 @@ public class UsuarioService {
      */
     @Transactional
     public Usuario updateUsuario(Long id, Usuario updateUsuario) {
-        Optional<Usuario> existingUsuario = usuarioRepository.findById(id);
+        Optional<Usuario> existingUsuario = usuarioRepository.findByActiveUser(id);
         if (existingUsuario.isPresent()) {
             Usuario usuario = existingUsuario.get();
             usuario.setNombre(updateUsuario.getNombre());

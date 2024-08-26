@@ -30,7 +30,7 @@ public class UsuarioDTO {
     private String telefono;
     private LocalDateTime fechaCreacion;
     private DireccionDTO direccion;
-      
+    private boolean softdeletedUser;
 
   
 }

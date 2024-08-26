@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Setter
 @ToString
 // soft delete actualizo el campo
-@SQLDelete(sql = "UPDATE usuarios SET softdeletedUser = true WHERE id=?")
+@SQLDelete(sql = "UPDATE usuarios SET softdeleted_user = true WHERE id=?")
 //este filtro excluiran a los usuarios eliminados
 @FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
 @Filter(name = "deletedUserFilter", condition = "deleted = :isDeleted")
@@ -57,8 +57,7 @@ public class Usuario extends Persona {
     @Pattern(regexp = "^\\+?[0-9]*$", message = "Teléfono solo incluir números")
     private String telefono;
 
-    @Column(name = "softdeletedUser")
-    
+    @Column(name = "softdeleted_user")  
     private boolean softdeletedUser = Boolean.FALSE;
   
     /**
