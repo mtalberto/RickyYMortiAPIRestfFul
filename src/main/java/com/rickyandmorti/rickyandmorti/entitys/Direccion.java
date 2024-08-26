@@ -1,8 +1,7 @@
 package com.rickyandmorti.rickyandmorti.entitys;
 
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -29,7 +28,7 @@ public class Direccion {
     @NotBlank(message = "el campo ciudad no puede estar vacio")
     private String ciudad;
     @NotBlank(message = "el campo codigoPostal no puede estar vacio")
-    @Size(max=5, min=5, message = "El código postal debe tener 5 caracteres")
+    @Size(max=5, message = "El código postal debe tener 5 caracteres")
     @Pattern(regexp = "^(?:0[1-9]|[1-4]\\d|5[0-2])\\d{3}$", message = "El código postal no es válido")
     private String codigoPostal;
     @NotBlank(message = "el campono pais no puede estar vacio")

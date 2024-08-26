@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -52,7 +53,7 @@ public class Usuario extends Persona {
 
     //incluir codigo de paises
     @Column(name = "telefono")
-    @Size(max =20, message = "telefono no debe tener más de 20 caracteres")
+    @Size(max =20,min = 12, message = "telefono no debe tener entre 12 y 20 caracteres")
     @Pattern(regexp = "^\\+?[0-9]*$", message = "Teléfono solo incluir números")
     private String telefono;
 
@@ -65,10 +66,12 @@ public class Usuario extends Persona {
      * que sus propiedades se pueden "incrustar" dentro de otra entidad sin crear
      * una tabla separada en la base de datos
      * 
-     * 
+     * para que que las validaciones de direccion se aplique el campo Direccion
+     * debe estar anotado con @Valid
      */
 
     @Embedded
+    @Valid
     private Direccion direccion;
 
 
