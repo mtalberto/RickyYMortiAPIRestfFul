@@ -85,6 +85,7 @@ public class PersonajeService {
                     .genero(personaje.getGenero())
                     .descripcion(personaje.getDescripcion())
                     .raza(personaje.getRaza())
+                    .fechaCreacion(personaje.getFechaCreacion())
                     .build();
             return Optional.of(personajeDTO);
         } else {

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @Data: Genera automáticamente los métodos getters, setters, toString(),
@@ -26,7 +27,7 @@ public class PersonajeDTO {
     private String genero;
     private String descripcion;
     private String raza;
-    private LocalDate fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
     
     public static String capitalizeFirstLetterNombre(String nombre) {

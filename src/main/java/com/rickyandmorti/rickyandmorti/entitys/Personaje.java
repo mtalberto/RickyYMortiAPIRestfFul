@@ -28,7 +28,7 @@ public class Personaje extends Persona {
     private Long id;
 
     @NotBlank(message = "descripcion no puede estar vacio")
-    @Column(nullable = false)
+    @Column(name = "descripcion",nullable = false)
     @Size(max = 50)
     private String descripcion;
 

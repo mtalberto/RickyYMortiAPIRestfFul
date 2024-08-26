@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
+import java.time.LocalDateTime;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -56,8 +56,6 @@ public abstract class Persona implements Serializable{
     @Column(nullable = false)
     private String genero;
 
-
-
     /*
      * 
      * Guardo la fecha de creacion del registro
@@ -65,10 +63,11 @@ public abstract class Persona implements Serializable{
      * 
      * @JsonFormat para el formate de la fecha en JSOn
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    @DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     @Column(name = "fecha_creacion")
-    private LocalDate fechaCreacion = LocalDate.now(ZoneId.of("Europa/Madrid"));
+    private LocalDateTime fechaCreacion = LocalDateTime.now(ZoneId.of("Europe/Madrid"));
+
 
    
     

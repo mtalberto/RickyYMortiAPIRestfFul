@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @Data: Genera automáticamente los métodos getters, setters, toString(),
@@ -27,8 +28,9 @@ public class UsuarioDTO {
     private String genero;
     private String email;
     private String telefono;
-    private LocalDate fechaCreacion;
+    private LocalDateTime fechaCreacion;
     private DireccionDTO direccion;
+      
 
   
 }
