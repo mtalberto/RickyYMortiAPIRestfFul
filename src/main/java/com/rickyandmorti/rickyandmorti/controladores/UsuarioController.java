@@ -67,7 +67,7 @@ public class UsuarioController {
     /*
      * get a usuario por ID
      */
-    @GetMapping("/usuario/{id}")
+    @GetMapping("/usuario/id/{id}")
     public ResponseEntity<Map<String, Object>> getUsuarioById(@PathVariable Long id) {
         Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioById(id);
 
@@ -84,11 +84,11 @@ public class UsuarioController {
     /*
      * get a usuario por Email
      */
-    @GetMapping("/usuario/{email}")
+    @GetMapping("/usuario/email/{email}")
     public ResponseEntity<Map<String, Object>> getUsuarioByEmail(@PathVariable String email) {
         Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioByEmail(email);
         Map<String, Object> response = new HashMap<>();
-        if (!usuarioDTO.isPresent()) {
+        if (usuarioDTO.isEmpty()) {
             throw new ResourceNotFoundException("el usuario con el " + email + " no existe ");
 
         } else {

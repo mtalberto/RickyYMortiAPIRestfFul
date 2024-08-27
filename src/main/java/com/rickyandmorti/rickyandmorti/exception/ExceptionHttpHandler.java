@@ -30,8 +30,8 @@ public class ExceptionHttpHandler {
     public ResponseEntity<Map<String, Object>> handleAllExceptions(Exception ex) {
         Map<String, Object> errorResponse = Map.of(
             "error", "Un error ha ocurrido: " + ex.getMessage(),
-            "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "error", HttpStatus.CONFLICT.getReasonPhrase()            
+            "status", HttpStatus.INTERNAL_SERVER_ERROR.value()
+                    
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
