@@ -68,13 +68,29 @@ public class UsuarioController {
      * get a usuario por ID
      */
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<Map<String, Object>> getUsuarioById(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getUsuarioByEmail(@PathVariable Long id) {
         Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioById(id);
 
         Map<String, Object> response = new HashMap<>();
         if (!usuarioDTO.isPresent()) {
             throw new ResourceNotFoundException("el usuario con el " + id + " no existe ");
             
+        } else {
+            response.put("usuario", usuarioDTO.get());
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    /*
+     * get a usuario por Email
+     */
+    @GetMapping("/usuario/{email}")
+    public ResponseEntity<Map<String, Object>> getUsuarioById(@PathVariable String email) {
+        Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioByEmail(email);
+        Map<String, Object> response = new HashMap<>();
+        if (!usuarioDTO.isPresent()) {
+            throw new ResourceNotFoundException("el usuario con el " + email + " no existe ");
+
         } else {
             response.put("usuario", usuarioDTO.get());
             return ResponseEntity.ok(response);
@@ -100,15 +116,15 @@ public class UsuarioController {
      */
     @DeleteMapping("/usuario/{id}")
     public ResponseEntity<Map<String, String>> deleteUsuario(@PathVariable Long id) {
-        boolean borrarUsuario = usuarioService.deleteUsuario(id);
+        boolean fueEliminado = usuarioService.deleteUsuario(id);
 
-        if (borrarUsuario) {
-            // devuelve un mensaje si el personaje ha sido borrado con exito
-            return ResponseEntity.ok(Map.of("message", "Personaje borrado con éxito"));
+        if (fueEliminado) {
+            
+            return ResponseEntity.ok(Map.of("message", "Usuario borrado con éxito"));
         } else {
-            // devuelve un 404 si no se ha encontrado un personaje
+            // El usuario no fue encontrado o ya estaba inactivo
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "El personaje con ID " + id + " no existe"));
+                    .body(Map.of("error", "El usuario con ID " + id + " no existe o esta eliminado"));
         }
     }
 

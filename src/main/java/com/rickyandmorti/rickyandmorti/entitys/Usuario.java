@@ -59,6 +59,13 @@ public class Usuario extends Persona {
 
     @Column(name = "softdeleted_user")  
     private boolean softdeletedUser = Boolean.FALSE;
+
+    @Column(name = "password")
+    @NotBlank(message = "password no puede estar vacío")
+    @Size(min = 10, message = "password  debe tener minimo de 10 caracteres")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[-?¿ºª<>.,`+ç´!@#$%^&*()]).*$", message = "La contraseña debe tener al menos 10 caracteres, incluyendo un número, una letra mayúscula, una letra minúscula y un carácter especial")
+    private String password;
+
   
     /**
      * Se utiliza para marcar una clase como una entidad embebible, lo que significa

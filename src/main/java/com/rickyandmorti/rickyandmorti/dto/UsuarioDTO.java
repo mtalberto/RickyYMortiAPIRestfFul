@@ -28,6 +28,7 @@ public class UsuarioDTO {
     private String genero;
     private String email;
     private String telefono;
+    private String password;
     private LocalDateTime fechaCreacion;
     private DireccionDTO direccion;
     private boolean softdeletedUser;

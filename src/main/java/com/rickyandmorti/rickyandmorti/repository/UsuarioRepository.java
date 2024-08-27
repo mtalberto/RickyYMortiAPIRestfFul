@@ -14,10 +14,17 @@ import org.springframework.stereotype.Repository;
 //interfaz jpa proporciona operaciones CRUD(crear,leer,actualizar, eliminar)
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-     @Query("SELECT u FROM Usuario u WHERE u.softdeletedUser = false")
-    List<Usuario> findAllActiveUsers();
-
-     @Query("SELECT u FROM Usuario u WHERE u.id = :id AND u.softdeletedUser = false")
-    Optional<Usuario> findByActiveUser(@Param("id") Long id);
    
+    @Query("SELECT u FROM Usuario u WHERE u.softdeletedUser = false")
+    List<Usuario> findAllActiveUsers();
+    
+    //:id parametro nombrado que se reemplazara porel valor que se pasa por el
+    @Query("SELECT u FROM Usuario u WHERE u.id = :id AND u.softdeletedUser = false")
+    Optional<Usuario> findByActiveUser(@Param("id") Long id);
+
+
+    // :emailparametro nombrado que se reemplazara porel valor que se pasa por el
+    @Query("SELECT u FROM Usuario u WHERE u.email = :email AND u.softdeletedUser = false")
+    Optional<Usuario> findByEmailActiveUser(@Param("email") String email);
+
 }
