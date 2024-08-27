@@ -1,5 +1,6 @@
 package com.rickyandmorti.rickyandmorti.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class ExceptionHttpHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-   // Manejo de excepciones  validación del campo campos
+   // Manejo de excepciones  validación del  campos
    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -60,7 +61,22 @@ public class ExceptionHttpHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    // Manejo de SQLIntegrityConstraintViolationException 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleSQLIntegrityConstraintViolationException(DataIntegrityViolationException ex) {
+        Throwable rootCause = ex.getRootCause();
 
+        if (rootCause instanceof java.sql.SQLIntegrityConstraintViolationException) {
+            Map<String, Object> errorResponse = Map.of(
+                "error", "El correo electrónico ya está en uso. Por favor, usa otro.",
+                "status", HttpStatus.CONFLICT.value()
+            );
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+        }
+
+        // Si la excepción no es del tipo que queremos manejar, lanzamos una excepción genérica
+        return handleAllExceptions(ex);
+    }
 
 
 
