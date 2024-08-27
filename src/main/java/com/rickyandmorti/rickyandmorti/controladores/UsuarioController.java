@@ -68,7 +68,7 @@ public class UsuarioController {
      * get a usuario por ID
      */
     @GetMapping("/usuario/{id}")
-    public ResponseEntity<Map<String, Object>> getUsuarioByEmail(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getUsuarioById(@PathVariable Long id) {
         Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioById(id);
 
         Map<String, Object> response = new HashMap<>();
@@ -85,7 +85,7 @@ public class UsuarioController {
      * get a usuario por Email
      */
     @GetMapping("/usuario/{email}")
-    public ResponseEntity<Map<String, Object>> getUsuarioById(@PathVariable String email) {
+    public ResponseEntity<Map<String, Object>> getUsuarioByEmail(@PathVariable String email) {
         Optional<UsuarioDTO> usuarioDTO = usuarioService.getUsuarioByEmail(email);
         Map<String, Object> response = new HashMap<>();
         if (!usuarioDTO.isPresent()) {
