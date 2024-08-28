@@ -68,7 +68,7 @@ public class UsuarioService {
     }
 
     /*
-     * obtengo el  usuario por el id
+     * obtengo el usuario por el id
      */
     @Transactional(readOnly = true)
     public Optional<UsuarioDTO> getUsuarioById(Long id) {
@@ -81,7 +81,6 @@ public class UsuarioService {
                     .nombre(usuario.getNombre())
                     .apellido(usuario.getApellido())
                     .edad(usuario.getEdad())
-                    
                     .fechaNacimiento(usuario.getFechaNacimiento())
                     .genero(usuario.getGenero())
                     .fechaCreacion(usuario.getFechaCreacion())
@@ -94,12 +93,11 @@ public class UsuarioService {
                             .pais(usuario.getDireccion().getPais()).build())
                     .build();
             return Optional.of(usuarioDTO);
-        
+
         } else {
             return Optional.empty();
         }
     }
-
 
     /*
      * obtengo el usuario por el email
@@ -110,8 +108,6 @@ public class UsuarioService {
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
             UsuarioDTO usuarioDTO = UsuarioDTO.builder()
-                    .id(usuario.getId())
-                    .password(usuario.getPassword())
                     .nombre(usuario.getNombre())
                     .apellido(usuario.getApellido())
                     .edad(usuario.getEdad())
@@ -164,11 +160,11 @@ public class UsuarioService {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByActiveUser(id);
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-           
+
             usuarioRepository.delete(usuario);
             return true;
         } else {
-           
+
             return false;
         }
     }

@@ -9,7 +9,7 @@
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.rickyandmorti</groupId>
+	<groupId>com.rickyandmorti.backend</groupId>
 	<artifactId>rickyandmorti</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>

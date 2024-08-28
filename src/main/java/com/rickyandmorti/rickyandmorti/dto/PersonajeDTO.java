@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+
 /**
  * @Data: Genera automáticamente los métodos getters, setters, toString(),
  *        equals(), y hashCode() para todos los campos de la clase.
  */
-
 
 @Data
 @Builder
